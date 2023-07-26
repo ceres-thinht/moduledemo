@@ -12,8 +12,6 @@ if (file_exists($autoloadPath)) {
 
 class ModuleDemo extends Module
 {
-    private $html = '';
-
     public function __construct()
     {
         $this->name = 'moduledemo';
@@ -21,6 +19,7 @@ class ModuleDemo extends Module
         $this->version = '1.0.0';
         $this->author = 'THINH TRAN';
         $this->need_instance = 0;
+        $this->bootstrap = true;
 
         parent::__construct();
 
@@ -36,7 +35,7 @@ class ModuleDemo extends Module
 
     public function install()
     {
-        return parent::install();
+        return parent::install() && $this->registerHook('displayBackOfficeHeader');
     }
 
     public function uninstall()
@@ -85,8 +84,6 @@ class ModuleDemo extends Module
             }
         }
 
-        $this->context->controller->addJS($this->_path . 'views/js/admin/configure.js');
-
         return $this->context->smarty->assign([
             'welcomeURL' => $this->changeValueOfQueryString('page', 'welcome'),
             'advancedSettingsURL' => $this->changeValueOfQueryString('page', 'advanced_settings'),
@@ -115,5 +112,11 @@ class ModuleDemo extends Module
 
         // Redirect to the modified URL
         return $_SERVER['PHP_SELF'] . '?' . http_build_query($paramsArray);
+    }
+
+    public function hookDisplayBackOfficeHeader($params)
+    {
+        $this->context->controller->addJS($this->_path . 'views/js/admin/configure.js');
+        $this->context->controller->addCSS(_PS_ADMIN_DIR_ . '/themes/new-theme/public/theme.css');
     }
 }
