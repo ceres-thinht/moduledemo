@@ -54,19 +54,19 @@ class ModuleDemo extends Module
      */
     public function getContent()
     {
-        $settingStatus = Configuration::get('SETTING_STATUS');
-        $serviceAPIURL = Configuration::get('SERVICE_API_URL');
-        $serviceKey = Configuration::get('SERVICE_KEY');
-        $authorizationAPIURL = Configuration::get('AUTHORIZATION_API_URL');
+        $settingStatus = Configuration::get('MODULEDEMO_SETTING_STATUS');
+        $serviceAPIURL = Configuration::get('MODULEDEMO_SERVICE_API_URL');
+        $serviceKey = Configuration::get('MODULEDEMO_SERVICE_KEY');
+        $authorizationAPIURL = Configuration::get('MODULEDEMO_AUTHORIZATION_API_URL');
         $isUpdated = null;
         $tab = null;
 
         if (Tools::isSubmit('submit' . $this->name)) {
             // Process the configuration form submission here
-            $settingStatus = (string)Tools::getValue('SETTING_STATUS');
-            $serviceAPIURL = (string)Tools::getValue('SERVICE_API_URL');
-            $serviceKey = (string)Tools::getValue('SERVICE_KEY');
-            $authorizationAPIURL = (string)Tools::getValue('AUTHORIZATION_API_URL');
+            $settingStatus = (string)Tools::getValue('MODULEDEMO_SETTING_STATUS');
+            $serviceAPIURL = (string)Tools::getValue('MODULEDEMO_SERVICE_API_URL');
+            $serviceKey = (string)Tools::getValue('MODULEDEMO_SERVICE_KEY');
+            $authorizationAPIURL = (string)Tools::getValue('MODULEDEMO_AUTHORIZATION_API_URL');
             $isUpdated = self::FAILED;
 
             // Validate and save the configuration value
@@ -74,10 +74,10 @@ class ModuleDemo extends Module
                 $serviceAPIURL = '';
                 $serviceKey = '';
                 $authorizationAPIURL = '';
-                Configuration::updateValue('SETTING_STATUS', $settingStatus);
-                Configuration::updateValue('SERVICE_API_URL', $serviceAPIURL);
-                Configuration::updateValue('SERVICE_KEY', $serviceKey);
-                Configuration::updateValue('AUTHORIZATION_API_URL', $authorizationAPIURL);
+                Configuration::updateValue('MODULEDEMO_SETTING_STATUS', $settingStatus);
+                Configuration::updateValue('MODULEDEMO_SERVICE_API_URL', $serviceAPIURL);
+                Configuration::updateValue('MODULEDEMO_SERVICE_KEY', $serviceKey);
+                Configuration::updateValue('MODULEDEMO_AUTHORIZATION_API_URL', $authorizationAPIURL);
                 $isUpdated = self::SUCCESS;
             }
 
@@ -85,10 +85,10 @@ class ModuleDemo extends Module
                 if (empty($serviceAPIURL) || empty($serviceKey)) {
                     $isUpdated = self::FAILED;
                 } else {
-                    Configuration::updateValue('SETTING_STATUS', $settingStatus);
-                    Configuration::updateValue('SERVICE_API_URL', $serviceAPIURL);
-                    Configuration::updateValue('SERVICE_KEY', $serviceKey);
-                    Configuration::updateValue('AUTHORIZATION_API_URL', $authorizationAPIURL);
+                    Configuration::updateValue('MODULEDEMO_SETTING_STATUS', $settingStatus);
+                    Configuration::updateValue('MODULEDEMO_SERVICE_API_URL', $serviceAPIURL);
+                    Configuration::updateValue('MODULEDEMO_SERVICE_KEY', $serviceKey);
+                    Configuration::updateValue('MODULEDEMO_AUTHORIZATION_API_URL', $authorizationAPIURL);
                     $isUpdated = self::SUCCESS;
                 }
             }
@@ -114,30 +114,12 @@ class ModuleDemo extends Module
             'settingStatus' => $settingStatus,
             'isUpdated' => $isUpdated,
             'tab' => $tab,
-        ])->fetch('module:' . $this->name . '/views/templates/admin/configure.tpl');
-    }
-
-    public function changeValueOfQueryString($key, $value)
-    {
-        $queryString = $_SERVER['QUERY_STRING'];
-
-        // Define the parameter to change and its new value
-        $paramToChange = $key;
-        $newValue = $value;
-
-        // Parse the query string to an associative array
-        parse_str($queryString, $paramsArray);
-
-        // Update the parameter value in the array
-        $paramsArray[$paramToChange] = $newValue;
-
-        // Redirect to the modified URL
-        return $_SERVER['PHP_SELF'] . '?' . http_build_query($paramsArray);
+        ])->fetch($this->getLocalPath() . '/views/templates/admin/configuration/configuration.tpl');
     }
 
     public function hookDisplayBackOfficeHeader($params)
     {
-        $this->context->controller->addJS($this->_path . 'views/js/admin/configure.js');
+        $this->context->controller->addJS($this->_path . 'views/js/admin/configuration.js');
         $this->context->controller->addCSS(_PS_ADMIN_DIR_ . '/themes/new-theme/public/theme.css');
     }
 }
