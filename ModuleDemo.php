@@ -12,6 +12,12 @@ if (file_exists($autoloadPath)) {
 
 class ModuleDemo extends Module
 {
+    const SUCCESS = 1;
+    const FAILED = 2;
+
+    const ON = 1;
+    const OFF = 0;
+
     public function __construct()
     {
         $this->name = 'moduledemo';
@@ -43,6 +49,9 @@ class ModuleDemo extends Module
         return parent::uninstall();
     }
 
+    /**
+     * @throws SmartyException
+     */
     public function getContent()
     {
         $settingStatus = Configuration::get('SETTING_STATUS');
@@ -50,6 +59,7 @@ class ModuleDemo extends Module
         $serviceKey = Configuration::get('SERVICE_KEY');
         $authorizationAPIURL = Configuration::get('AUTHORIZATION_API_URL');
         $isUpdated = null;
+        $tab = null;
 
         if (Tools::isSubmit('submit' . $this->name)) {
             // Process the configuration form submission here
@@ -57,10 +67,10 @@ class ModuleDemo extends Module
             $serviceAPIURL = (string)Tools::getValue('SERVICE_API_URL');
             $serviceKey = (string)Tools::getValue('SERVICE_KEY');
             $authorizationAPIURL = (string)Tools::getValue('AUTHORIZATION_API_URL');
-            $isUpdated = false;
+            $isUpdated = self::FAILED;
 
             // Validate and save the configuration value
-            if ((int)$settingStatus === 0) {
+            if ((int)$settingStatus === self::OFF) {
                 $serviceAPIURL = '';
                 $serviceKey = '';
                 $authorizationAPIURL = '';
@@ -68,31 +78,42 @@ class ModuleDemo extends Module
                 Configuration::updateValue('SERVICE_API_URL', $serviceAPIURL);
                 Configuration::updateValue('SERVICE_KEY', $serviceKey);
                 Configuration::updateValue('AUTHORIZATION_API_URL', $authorizationAPIURL);
-                $isUpdated = true;
+                $isUpdated = self::SUCCESS;
             }
 
-            if ((int)$settingStatus === 1) {
+            if ((int)$settingStatus === self::ON) {
                 if (empty($serviceAPIURL) || empty($serviceKey)) {
-                    $isUpdated = false;
+                    $isUpdated = self::FAILED;
                 } else {
                     Configuration::updateValue('SETTING_STATUS', $settingStatus);
                     Configuration::updateValue('SERVICE_API_URL', $serviceAPIURL);
                     Configuration::updateValue('SERVICE_KEY', $serviceKey);
                     Configuration::updateValue('AUTHORIZATION_API_URL', $authorizationAPIURL);
-                    $isUpdated = true;
+                    $isUpdated = self::SUCCESS;
                 }
             }
+            $this->context->cookie->__set('tab', 'advanced_settings');
+            $this->context->cookie->__set('isUpdated', $isUpdated);
+            Tools::redirect($this->context->link->getAdminLink('AdminModules') . '&configure=' . $this->name);
+        }
+
+        if ($this->context->cookie->__isset('tab')) {
+            $tab = $this->context->cookie->__get('tab');
+            $this->context->cookie->__unset('tab');
+        }
+
+        if ($this->context->cookie->__isset('isUpdated')) {
+            $isUpdated = $this->context->cookie->__get('isUpdated');
+            $this->context->cookie->__unset('isUpdated');
         }
 
         return $this->context->smarty->assign([
-            'welcomeURL' => $this->changeValueOfQueryString('page', 'welcome'),
-            'advancedSettingsURL' => $this->changeValueOfQueryString('page', 'advanced_settings'),
-            'helpURL' => $this->changeValueOfQueryString('page', 'help'),
             'serviceAPIURL' => $serviceAPIURL,
             'serviceKey' => $serviceKey,
             'authorizationAPIURL' => $authorizationAPIURL,
             'settingStatus' => $settingStatus,
             'isUpdated' => $isUpdated,
+            'tab' => $tab,
         ])->fetch('module:' . $this->name . '/views/templates/admin/configure.tpl');
     }
 
