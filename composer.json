@@ -1,0 +1,9 @@
+{
+    "name": "prestashop/moduledemo",
+    "autoload": {
+        "psr-4": {
+            "PrestaShop\\Moduledemo\\Controller\\": "src/Controller/"
+        }
+    },
+    "require": {}
+}

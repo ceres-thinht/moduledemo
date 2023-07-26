@@ -1,0 +1,35 @@
+/* modules/moduledemo/css/custom.css */
+
+.panel {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.panel-heading {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 15px;
+}
+
+.panel-body {
+    padding: 15px;
+}
+
+.panel-footer {
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding: 10px 15px;
+}
+
+.form-horizontal .form-group {
+    margin-bottom: 15px;
+}
+
+.form-horizontal .control-label {
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+}
