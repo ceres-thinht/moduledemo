@@ -31,15 +31,15 @@
                     Turn on settings
                 </label>
                 <div class="col-lg-8">
-                     <span class="ps-switch ps-switch-lg">
+                     <span class="ps-switch">
                          <input type="radio"
-                                name="MODULEDEMO_SETTING_STATUS"
+                                name="settingStatus"
                                 id="no_option"
                                 value="0"
                                 {if $settingStatus|intval === 0}checked{/if}/>
                          <label for="no_option">NO</label>
                          <input type="radio"
-                                name="MODULEDEMO_SETTING_STATUS"
+                                name="settingStatus"
                                 id="yes_option"
                                 value="1"
                                 {if $settingStatus|intval === 1}checked{/if}/>
@@ -50,26 +50,26 @@
             </div>
             <div class="form-group -option">
                 <label class="control-label col-lg-4 required"
-                       for="MODULEDEMO_SERVICE_API_URL">
+                       for="serviceAPIURL">
                     Service API URL
                 </label>
                 <div class="col-lg-8">
                     <input type="text"
-                           name="MODULEDEMO_SERVICE_API_URL"
-                           id="MODULEDEMO_SERVICE_API_URL"
+                           name="serviceAPIURL"
+                           id="serviceAPIURL"
                            value="{$serviceAPIURL}"
                            size="20"
                            required="required">
                 </div>
             </div>
             <div class="form-group -option">
-                <label class="control-label col-lg-4 required" for="MODULEDEMO_SERVICE_KEY">
+                <label class="control-label col-lg-4 required" for="serviceKey">
                     Service Key
                 </label>
                 <div class="col-lg-8">
                     <input type="text"
-                           name="MODULEDEMO_SERVICE_KEY"
-                           id="MODULEDEMO_SERVICE_KEY"
+                           name="serviceKey"
+                           id="serviceKey"
                            value="{$serviceKey}"
                            class=""
                            size="20"
@@ -78,13 +78,13 @@
             </div>
             <div class="form-group -option">
                 <label class="control-label col-lg-4"
-                       for="MODULEDEMO_AUTHORIZATION_API_URL">
+                       for="authorizationAPIURL">
                     Authorization API URL
                 </label>
                 <div class="col-lg-8">
                     <input type="text"
-                           name="MODULEDEMO_AUTHORIZATION_API_URL"
-                           id="MODULEDEMO_AUTHORIZATION_API_URL"
+                           name="authorizationAPIURL"
+                           id="authorizationAPIURL"
                            value="{$authorizationAPIURL}"
                            size="20"/>
                 </div>

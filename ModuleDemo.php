@@ -54,30 +54,31 @@ class ModuleDemo extends Module
      */
     public function getContent()
     {
-        $settingStatus = Configuration::get('MODULEDEMO_SETTING_STATUS');
-        $serviceAPIURL = Configuration::get('MODULEDEMO_SERVICE_API_URL');
-        $serviceKey = Configuration::get('MODULEDEMO_SERVICE_KEY');
-        $authorizationAPIURL = Configuration::get('MODULEDEMO_AUTHORIZATION_API_URL');
+        $configData = json_decode(Configuration::get('MODULEDEMO_CONFIG_DATA') ?? '', true);
+        $settingStatus = $configData['settingStatus'] ?? self::OFF;
+        $serviceAPIURL = $configData['serviceAPIURL'] ?? '';
+        $serviceKey = $configData['serviceKey'] ?? '';
+        $authorizationAPIURL = $configData['authorizationAPIURL'] ?? '';
         $isUpdated = null;
         $tab = null;
 
         if (Tools::isSubmit('submit' . $this->name)) {
             // Process the configuration form submission here
-            $settingStatus = (string)Tools::getValue('MODULEDEMO_SETTING_STATUS');
-            $serviceAPIURL = (string)Tools::getValue('MODULEDEMO_SERVICE_API_URL');
-            $serviceKey = (string)Tools::getValue('MODULEDEMO_SERVICE_KEY');
-            $authorizationAPIURL = (string)Tools::getValue('MODULEDEMO_AUTHORIZATION_API_URL');
+            $settingStatus = (string)Tools::getValue('settingStatus', self::OFF);
+            $serviceAPIURL = (string)Tools::getValue('serviceAPIURL', '');
+            $serviceKey = (string)Tools::getValue('serviceKey', '');
+            $authorizationAPIURL = (string)Tools::getValue('authorizationAPIURL', '');
+            $configData = json_encode([
+                'settingStatus' => $settingStatus,
+                'serviceAPIURL' => $serviceAPIURL,
+                'serviceKey' => $serviceKey,
+                'authorizationAPIURL' => $authorizationAPIURL,
+            ]);
             $isUpdated = self::FAILED;
 
             // Validate and save the configuration value
             if ((int)$settingStatus === self::OFF) {
-                $serviceAPIURL = '';
-                $serviceKey = '';
-                $authorizationAPIURL = '';
-                Configuration::updateValue('MODULEDEMO_SETTING_STATUS', $settingStatus);
-                Configuration::updateValue('MODULEDEMO_SERVICE_API_URL', $serviceAPIURL);
-                Configuration::updateValue('MODULEDEMO_SERVICE_KEY', $serviceKey);
-                Configuration::updateValue('MODULEDEMO_AUTHORIZATION_API_URL', $authorizationAPIURL);
+                Configuration::updateValue('MODULEDEMO_CONFIG_DATA', '');
                 $isUpdated = self::SUCCESS;
             }
 
@@ -85,10 +86,7 @@ class ModuleDemo extends Module
                 if (empty($serviceAPIURL) || empty($serviceKey)) {
                     $isUpdated = self::FAILED;
                 } else {
-                    Configuration::updateValue('MODULEDEMO_SETTING_STATUS', $settingStatus);
-                    Configuration::updateValue('MODULEDEMO_SERVICE_API_URL', $serviceAPIURL);
-                    Configuration::updateValue('MODULEDEMO_SERVICE_KEY', $serviceKey);
-                    Configuration::updateValue('MODULEDEMO_AUTHORIZATION_API_URL', $authorizationAPIURL);
+                    Configuration::updateValue('MODULEDEMO_CONFIG_DATA', $configData);
                     $isUpdated = self::SUCCESS;
                 }
             }

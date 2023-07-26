@@ -1,7 +1,7 @@
 $(window).ready(() => {
-    const settingStatusInput = $('input[name="MODULEDEMO_SETTING_STATUS"]');
+    const settingStatusInput = $('input[name="settingStatus"]');
     const optionElements = $('.-option');
-    const currentSettingStatus = $('input[name="MODULEDEMO_SETTING_STATUS"]:checked').val();
+    const currentSettingStatus = $('input[name="settingStatus"]:checked').val();
     const alertElement = $('.alert');
 
     const welcomeTabBtn = $('span.-go-to-welcome-tab');
