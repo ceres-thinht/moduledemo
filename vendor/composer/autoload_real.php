@@ -22,14 +22,14 @@ class ComposerAutoloaderInit1a25d9930325eb582f41f3bf9683bf40
             return self::$loader;
         }
 
-        spl_autoload_register(array('ComposerAutoloaderInit1a25d9930325eb582f41f3bf9683bf40', 'loadClassLoader'), true, true);
+        spl_autoload_register(array('ComposerAutoloaderInit1a25d9930325eb582f41f3bf9683bf40', 'loadClassLoader'), true, false);
         self::$loader = $loader = new \Composer\Autoload\ClassLoader(\dirname(__DIR__));
         spl_autoload_unregister(array('ComposerAutoloaderInit1a25d9930325eb582f41f3bf9683bf40', 'loadClassLoader'));
 
         require __DIR__ . '/autoload_static.php';
         call_user_func(\Composer\Autoload\ComposerStaticInit1a25d9930325eb582f41f3bf9683bf40::getInitializer($loader));
 
-        $loader->register(true);
+        $loader->register(false);
 
         return $loader;
     }
