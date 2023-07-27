@@ -70,7 +70,7 @@ class ModuleDemo extends Module
     public function install()
     {
         return parent::install() &&
-            $this->registerHook('displayBackOfficeHeader') &&
+            $this->registerHook('actionAdminControllerSetMedia') &&
             $this->installTabs();
     }
 
@@ -145,7 +145,7 @@ class ModuleDemo extends Module
         ])->fetch($this->getLocalPath() . '/views/templates/admin/configuration/configuration.tpl');
     }
 
-    public function hookDisplayBackOfficeHeader($params)
+    public function hookActionAdminControllerSetMedia()
     {
         $this->context->controller->addJS($this->_path . 'views/js/admin/configuration.js');
         $this->context->controller->addCSS(_PS_ADMIN_DIR_ . '/themes/new-theme/public/theme.css');
