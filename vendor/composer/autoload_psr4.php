@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'PrestaShop\\Moduledemo\\Controller\\' => array($baseDir . '/src/Controller'),
+    'ModuleDemo\\' => array($baseDir . '/src'),
 );

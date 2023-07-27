@@ -1,0 +1,15 @@
+admin_moduledemo_list:
+  path: moduledemo/list
+  methods: [GET]
+  defaults:
+    _controller: 'ModuleDemo\Controller\AdminListController::list'
+    _legacy_controller: 'AdminModuleDemoList'
+    _legacy_link: 'AdminModuleDemoList'
+
+admin_moduledemo_example:
+  path: moduledemo/other
+  methods: [GET]
+  defaults:
+    _controller: 'ModuleDemo\Controller\AdminListController::example'
+    _legacy_controller: 'AdminModuleDemoExample'
+    _legacy_link: 'AdminModuleDemoExample'
