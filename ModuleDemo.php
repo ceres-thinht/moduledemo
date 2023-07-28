@@ -21,11 +21,15 @@ class ModuleDemo extends Module
     public function __construct()
     {
         $this->name = 'moduledemo';
-        $this->tab = 'front_office_features';
+        $this->tab = 'administration';
         $this->version = '1.0.0';
         $this->author = 'THINH TRAN';
         $this->need_instance = 0;
         $this->bootstrap = true;
+        $this->ps_versions_compliancy = [
+            'min' => '1.7',
+            'max' => _PS_VERSION_,
+        ];
 
         parent::__construct();
 
@@ -55,14 +59,12 @@ class ModuleDemo extends Module
                 'name' => 'Filters',
                 'icon' => '',
                 'tabParentClassName' => 'AdminModuleDemoCatalog',
-                'routeName' => 'admin_moduledemo_list',
             ],
             [
                 'className' => 'AdminModuleDemoExample',
                 'name' => 'Others',
                 'icon' => '',
                 'tabParentClassName' => 'AdminModuleDemoCatalog',
-                'routeName' => 'admin_moduledemo_example',
             ],
         ];
     }
@@ -162,7 +164,6 @@ class ModuleDemo extends Module
                 $tabData['name'] ?? '',
                 $tabData['icon'] ?? '',
                 $tabData['tabParentClassName'] ?? '',
-                $tabData['routeName'] ?? '',
             ) &&
             $this->installTabs(++$index);
     }
