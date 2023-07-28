@@ -66,6 +66,30 @@ class ModuleDemo extends Module
                 'icon' => '',
                 'tabParentClassName' => 'AdminModuleDemoCatalog',
             ],
+            [
+                'className' => 'AdminModuleDemoProductList',
+                'name' => 'Products',
+                'icon' => '',
+                'tabParentClassName' => 'AdminModuleDemoList',
+            ],
+            [
+                'className' => 'AdminModuleDemoManufactureList',
+                'name' => 'Manufactures',
+                'icon' => '',
+                'tabParentClassName' => 'AdminModuleDemoList',
+            ],
+            [
+                'className' => 'AdminModuleDemoSupplierList',
+                'name' => 'Suppliers',
+                'icon' => '',
+                'tabParentClassName' => 'AdminModuleDemoList',
+            ],
+            [
+                'className' => 'AdminModuleDemoCategoryList',
+                'name' => 'Categories',
+                'icon' => '',
+                'tabParentClassName' => 'AdminModuleDemoList',
+            ],
         ];
     }
 
