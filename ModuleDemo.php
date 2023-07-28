@@ -211,7 +211,6 @@ class ModuleDemo extends Module
         $tab->class_name = $tabClass;
         $tab->route_name = $routeName;
         $tab->module = $this->name;
-        $tab->position = 99;
         $tab->active = 1;
         if (!empty($tabParentClassName)) {
             $tab->id_parent = (int)Tab::getInstanceFromClassName($tabParentClassName)->id ?? 0;
