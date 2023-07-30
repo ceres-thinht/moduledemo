@@ -21,11 +21,15 @@ class ModuleDemo extends Module
     public function __construct()
     {
         $this->name = 'moduledemo';
-        $this->tab = 'front_office_features';
+        $this->tab = 'administration';
         $this->version = '1.0.0';
         $this->author = 'THINH TRAN';
         $this->need_instance = 0;
         $this->bootstrap = true;
+        $this->ps_versions_compliancy = [
+            'min' => '1.7',
+            'max' => _PS_VERSION_,
+        ];
 
         parent::__construct();
 
@@ -37,16 +41,44 @@ class ModuleDemo extends Module
         if (!Configuration::get('moduledemo')) {
             $this->warning = $this->l('No name provided');
         }
+
+        $this->menus = [
+            [
+                'className' => 'AdminModuleDemo',
+                'name' => 'Module Demo',
+                'icon' => '',
+            ],
+            [
+                'className' => 'AdminModuleDemoCatalog',
+                'name' => 'Catalog',
+                'icon' => 'store',
+                'tabParentClassName' => 'AdminModuleDemo',
+            ],
+            [
+                'className' => 'AdminModuleDemoList',
+                'name' => 'Filters',
+                'icon' => '',
+                'tabParentClassName' => 'AdminModuleDemoCatalog',
+            ],
+            [
+                'className' => 'AdminModuleDemoExample',
+                'name' => 'Others',
+                'icon' => '',
+                'tabParentClassName' => 'AdminModuleDemoCatalog',
+            ],
+        ];
     }
 
     public function install()
     {
-        return parent::install() && $this->registerHook('displayBackOfficeHeader');
+        return parent::install() &&
+            $this->registerHook('actionAdminControllerSetMedia') &&
+            $this->installTabs();
     }
 
     public function uninstall()
     {
-        return parent::uninstall();
+        return parent::uninstall() && $this->uninstallTabs();
     }
 
     /**
@@ -115,9 +147,66 @@ class ModuleDemo extends Module
         ])->fetch($this->getLocalPath() . '/views/templates/admin/configuration/configuration.tpl');
     }
 
-    public function hookDisplayBackOfficeHeader($params)
+    public function hookActionAdminControllerSetMedia()
     {
         $this->context->controller->addJS($this->_path . 'views/js/admin/configuration.js');
         $this->context->controller->addCSS(_PS_ADMIN_DIR_ . '/themes/new-theme/public/theme.css');
+    }
+
+    public function installTabs($index = 0): bool
+    {
+        $tabData = $this->menus[$index] ?? null;
+        if (empty($tabData)) {
+            return true;
+        }
+        return $this->installModuleTab(
+                $tabData['className'] ?? '',
+                $tabData['name'] ?? '',
+                $tabData['icon'] ?? '',
+                $tabData['tabParentClassName'] ?? '',
+            ) &&
+            $this->installTabs(++$index);
+    }
+
+    public function uninstallTabs($index = 0): bool
+    {
+        $tabData = $this->menus[$index] ?? null;
+        if (empty($tabData)) {
+            return true;
+        }
+        return $this->uninstallModuleTab($tabData['className']) && $this->uninstallTabs(++$index);
+    }
+
+    private function installModuleTab($tabClass = '', $tabName = '', $icon = '', $tabParentClassName = false, $routeName = ''): bool
+    {
+        $tab = Tab::getInstanceFromClassName($tabClass);
+        foreach (Language::getLanguages() as $language) {
+            $tab->name[$language['id_lang']] = $tabName;
+        }
+        $tab->icon = $icon;
+        $tab->class_name = $tabClass;
+        $tab->route_name = $routeName;
+        $tab->module = $this->name;
+        $tab->position = 99;
+        $tab->active = 1;
+        if (!empty($tabParentClassName)) {
+            $tab->id_parent = (int)Tab::getInstanceFromClassName($tabParentClassName)->id ?? 0;
+        } else {
+            $tab->id_parent = 0;
+        }
+        if ($tab->id) {
+            return $tab->update();
+        } else {
+            return $tab->add();
+        }
+    }
+
+    private function uninstallModuleTab($class_name): bool
+    {
+        $tab = Tab::getInstanceFromClassName($class_name);
+        if ($tab->id != 0) {
+            return $tab->delete();
+        }
+        return false;
     }
 }
