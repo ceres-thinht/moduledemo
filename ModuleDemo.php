@@ -66,6 +66,30 @@ class ModuleDemo extends Module
                 'icon' => '',
                 'tabParentClassName' => 'AdminModuleDemoCatalog',
             ],
+            [
+                'className' => 'AdminModuleDemoProductList',
+                'name' => 'Products',
+                'icon' => '',
+                'tabParentClassName' => 'AdminModuleDemoList',
+            ],
+            [
+                'className' => 'AdminModuleDemoManufactureList',
+                'name' => 'Manufactures',
+                'icon' => '',
+                'tabParentClassName' => 'AdminModuleDemoList',
+            ],
+            [
+                'className' => 'AdminModuleDemoSupplierList',
+                'name' => 'Suppliers',
+                'icon' => '',
+                'tabParentClassName' => 'AdminModuleDemoList',
+            ],
+            [
+                'className' => 'AdminModuleDemoCategoryList',
+                'name' => 'Categories',
+                'icon' => '',
+                'tabParentClassName' => 'AdminModuleDemoList',
+            ],
         ];
     }
 
@@ -149,8 +173,10 @@ class ModuleDemo extends Module
 
     public function hookActionAdminControllerSetMedia()
     {
-        $this->context->controller->addJS($this->_path . 'views/js/admin/configuration.js');
-        $this->context->controller->addCSS(_PS_ADMIN_DIR_ . '/themes/new-theme/public/theme.css');
+        if (Tools::getValue('configure') == $this->name) {
+            $this->context->controller->addJS($this->_path . 'views/js/admin/configuration.js');
+            $this->context->controller->addCSS(_PS_ADMIN_DIR_ . '/themes/new-theme/public/theme.css');
+        }
     }
 
     public function installTabs($index = 0): bool
@@ -187,7 +213,6 @@ class ModuleDemo extends Module
         $tab->class_name = $tabClass;
         $tab->route_name = $routeName;
         $tab->module = $this->name;
-        $tab->position = 99;
         $tab->active = 1;
         if (!empty($tabParentClassName)) {
             $tab->id_parent = (int)Tab::getInstanceFromClassName($tabParentClassName)->id ?? 0;
