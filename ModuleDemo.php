@@ -173,8 +173,10 @@ class ModuleDemo extends Module
 
     public function hookActionAdminControllerSetMedia()
     {
-        $this->context->controller->addJS($this->_path . 'views/js/admin/configuration.js');
-        $this->context->controller->addCSS(_PS_ADMIN_DIR_ . '/themes/new-theme/public/theme.css');
+        if (Tools::getValue('configure') == $this->name) {
+            $this->context->controller->addJS($this->_path . 'views/js/admin/configuration.js');
+            $this->context->controller->addCSS(_PS_ADMIN_DIR_ . '/themes/new-theme/public/theme.css');
+        }
     }
 
     public function installTabs($index = 0): bool
